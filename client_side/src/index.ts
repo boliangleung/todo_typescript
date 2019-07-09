@@ -191,9 +191,9 @@ const getFullName = ({ firstName, lastName }: IInfo) =>
   `${firstName} ${lastName}`;
 /* 接口的可选属性 ? */
 interface IInfo2 {
-  color: string;
+  color?: string;
   age: number;
 }
-const getAttriName = ({ color:     "123", age:    15}: IInfo2) => {
-  `${color} ${age}`;
+const getAttriName = ({ color, age }: IInfo2) => {
+  return `${color} ${age}`;
 };
