@@ -60,7 +60,7 @@ window.console.log(consoleText("3131"));
 const errorNever = (message: string): never => {
   throw new Error(message);
 };
-errorNever("456");
+// errorNever("456");
 
 const foreverE = (): never => {
   while (true) {}
@@ -70,7 +70,7 @@ const foreverE = (): never => {
 而infiniteFunc是死循环是根本不会返回值的，所以它们二者还是有区别的。 */
 
 /*
-6unknown类型
+6 unknown类型
 需要通过基于控制流的类型断言来缩小范围，否则不能对它进行任何操作
 */
 
@@ -92,4 +92,108 @@ const lisonInfo = merge(info1, info2);
 
 window.console.log(lisonInfo.age); // error 类型“{ name: string; } & { age: number; }”上不存在属性“address”
 
-/* symbol 前面不可加New 关键字 直接调用即可创建一个独一无二的symbol类型的值*/
+/* symbol 前面不可加New 关键字 直接调用即可创建一个独一无二的symbol类型的值 直接通过Symbol函数生成*/
+const symbolTest = Symbol("hellow");
+
+/* symbol 有很多个api方法 11个symbol 内置的值 */
+
+/* 深入学习枚举 */
+// 修改起始编号
+enum Color {
+  Red = 2,
+  Blue,
+  Yellow,
+}
+window.console.log(Color.Red, Color.Blue, Color.Yellow); // 2 3 4
+// 指定任意字段的索引值
+enum Status {
+  Success = 200,
+  NotFound = 404,
+  Error = 500,
+}
+window.console.log(Status.Success, Status.NotFound, Status.Error); // 200 404 500
+// 指定部分字段，其他使用默认递增索引
+enum Status {
+  Ok = 200,
+  Created,
+  Accepted,
+  BadRequest = 400,
+  Unauthorized,
+}
+window.console.log(Status.Created, Status.Accepted, Status.Unauthorized); // 201 202 401
+// 在定义值的时候，可以使用计算值和常量。但是要注意，如果某个字段使用了计算值或常量，那么该字段后面紧接着的字段必须 **设置初始值**，这里不能使用默认的递增值了，来看例子：
+const getValue = () => {
+  return 0;
+};
+// enum ErrorIndex {
+//   a = getValue(),
+//   b, // error 枚举成员必须具有初始化的值
+//   c,
+// }
+enum RightIndex {
+  a = getValue(),
+  b = 1,
+  c,
+}
+const Start = 1;
+// enum Index {
+//   a = Start,
+//   b, // error 枚举成员必须具有初始化的值
+//   c,
+// }
+// 异构枚举 如果不是真的需要  不建议使用
+enum Message {
+  Error = "Sorry, error",
+  Success = "Hoho, success",
+  numError = 123,
+}
+window.console.log(Message.numError); // 'Sorry, error'
+
+/* 枚举成员类型和联合枚举类型 */
+
+enum enumStatus {
+  OFF,
+  On,
+}
+const enum Animal {
+  Dog,
+  Cat,
+}
+const status1 = enumStatus.On;
+const animal = Animal.Dog;
+//   var Status;
+//   (function (Status) {
+//     Status[(Status["Off"] = 0)] = "Off";
+//     Status[(Status["On"] = 1)] = "On";
+//   })(Status || (Status = {}));
+// var status = Status.On;
+// var animal = 0; /* Dog */
+
+// const enum 直接把Animal.Dog的值0替换到了 const animal = Animal.Dog表达式的Animal.Dog位置上。选择不生成对象，而是直接替换位置
+//
+window.console.log(animal);
+/* 类型断言 */
+const getStrLength = (target: string | number): number => {
+  if ((target as string).length) {
+    // 这种形式在JSX代码中不可以使用，而且也是TSLint不建议的写法
+    return (target as string).length; // 这种形式是没有任何问题的写法，所以建议大家始终使用这种形式
+  } else {
+    return target.toString().length;
+  }
+};
+
+/* 使用接口定义 */
+interface IInfo {
+  firstName: string;
+  lastName: string;
+}
+const getFullName = ({ firstName, lastName }: IInfo) =>
+  `${firstName} ${lastName}`;
+/* 接口的可选属性 ? */
+interface IInfo2 {
+  color: string;
+  age: number;
+}
+const getAttriName = ({ color:     "123", age:    15}: IInfo2) => {
+  `${color} ${age}`;
+};
